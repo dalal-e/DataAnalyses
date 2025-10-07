@@ -2,7 +2,8 @@
 
 ## Project Overview
 
-This project analyzes the relationship between COVID-19 case counts, death rates, vaccination rates, and population data for various countries and continents. By leveraging publicly available datasets, the analysis aims to uncover patterns, trends, and insights related to the pandemic's progression and its impact on different regions of the world. This project also explores how vaccination campaigns correlate with death rates and case counts.
+This project analyzes the relationship between COVID-19 case counts, death rates, vaccination rates, and population data for various countries and continents. By leveraging publicly available datasets, the analysis aims to uncover patterns, trends, and insights related to the pandemic's progression and its impact on different regions of the world. This project also explores how vaccination campaigns correlate with death rates and case counts. To visualize the data I found, I used Tableau.
+
 
 ---
 
@@ -18,6 +19,7 @@ This project analyzes the relationship between COVID-19 case counts, death rates
     - [Case Count by Continent](#case-count-by-continent)
     - [Cases vs Vaccination](#cases-vs-vaccination)
 4. [Download File & Push to GitHub Repository](#download-file-push-to-github-repository)
+5. [Visualize Death and Vaccination Analysis in Tableau]
 
 ---
 
@@ -74,7 +76,7 @@ order by 1, 2;
 This query identifies the countries with the highest number of COVID-19 cases relative to their population.
 
 In SQL:
-```
+```sql
 select location, date, max(total_cases) as highestinfectioncount, population, max((total_cases / population)) as percentpopulationinfected
 from covid_deaths_project.covid_deaths
 group by location, population
@@ -85,7 +87,7 @@ order by percentpopulationinfected desc;
 This analysis identifies the countries with the highest death count from COVID-19.
 
 In SQL:
-```
+```sql
 select location, max(cast(total_deaths as int)) as totaldeathcount
 from covid_deaths_project.covid_deaths
 group by location
@@ -96,7 +98,7 @@ order by totaldeathcount desc;
 This analysis groups countries by continent and ranks them based on the total death count from COVID-19.
 
 In SQL:
-```
+```sql
 select continent, max(cast(total_deaths as int)) as totaldeathcount
 from covid_deaths_project.covid_deaths
 where continent is not null
@@ -108,7 +110,7 @@ order by totaldeathcount desc;
 This analysis explores the correlation between vaccination rates and the number of COVID-19 cases. By calculating the percentage of the population vaccinated, we can compare this data with case counts and deaths.
 
 In SQL:
-```
+```sql
 select dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations, 
     sum(cast(vac.new_vaccinations as int)) over (partition by dea.location order by dea.location, dea.date) as rollingpeoplevaccinated,
     (rollingpeoplevaccinated / population) * 100 as PercentageVaccinated
@@ -121,7 +123,7 @@ order by 2, 3;
 ```
 
 To store this data for future analysis and visualization, a view was created:
-```
+```sql
 create view percentpopulationvaccinated as
 select dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations, 
     sum(cast(vac.new_vaccinations as int)) over (partition by dea.location order by dea.location, dea.date) as rollingpeoplevaccinated
@@ -136,8 +138,41 @@ where dea.continent is not null;
 Once the analysis is complete, the dataset was pushed to a Github repository:
 
 In CLI:
-```
+```bash
 git add .
 git commit -m "Initial commit of data analysis project"
 git push origin main
 ```
+
+
+## Tableau Visualization
+
+Create four visuals in Tableau
+
+1. In MySQL, uses previous queries, run, press ctrl shift c, copies the data in results, go to excel and insert it into new sheet, and save as "Tableau Table 1", "Tableau Table 2", etc.
+2. Deal with nulls. Do
+	1. ctrl h, find nulls
+	2. replace with 0
+
+In Tableau
+1. Click microsoft excel in left panel
+2. Go to sheet 2, insert tables 2-4
+3. go to sheet 1,  
+	1. drag sum(total cases) to columns, also total deaths, death percentage
+4. For sheet 2
+	1. total death count in rows, location in columns
+	2. sort them by right clicking location and sort
+	3. rename table from location to continent
+	4. consider changing axis, right click y axis
+5. For sheet three (map)
+	1. location change to geographic role country/region
+	2. drag long to col, lat to row
+	3. drag location, percent population infected to marks, change percent population to color
+	4. click color in marks to edit colors. 
+6. For sheet four
+	1. date in col, percent population in rows
+	2. change date to month
+	3. location to marks, filter to select large countries
+	4. locaiton to marks again, labels
+	5. add predictive analysis, go to analysis, click forecast
+7. Create dashboard
