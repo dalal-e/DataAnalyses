@@ -106,7 +106,7 @@ group by continent
 order by totaldeathcount desc;
 ```
 
-###Cases vs Vaccination
+### Cases vs Vaccination
 This analysis explores the correlation between vaccination rates and the number of COVID-19 cases. By calculating the percentage of the population vaccinated, we can compare this data with case counts and deaths.
 
 In SQL:
