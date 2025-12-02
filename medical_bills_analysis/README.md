@@ -66,9 +66,3 @@
     wrangling, SQL-based analytical reasoning, and effective visual communication with data. Together, these skills showcase an end-to-end understanding of data 
     workflows — making this project relevant for roles in healthcare analytics, finance, and broader data-driven industries. The structured process and documented 
     outputs also simulate a real-world business problem-solving scenario..
-
- 
-## 🙌 Let's Connect
-
-   If you're a recruiter, fellow analyst, or enthusiast and would like to discuss this project, feel free to connect with me on
-   [linkedin](https://www.linkedin.com/in/abhay-rana-76b724232/)
